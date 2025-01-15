@@ -1,0 +1,228 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class TaskManagementSystem {
+
+    // Model
+    public static class Task {
+        private int id;
+        private String title;
+        private String description;
+        private LocalDate dueDate;
+        private Priority priority;
+
+        public enum Priority {
+            LOW, MEDIUM, HIGH
+        }
+
+        public Task(int id, String title, String description, LocalDate dueDate, Priority priority) {
+            this.id = id;
+            this.title = title;
+            this.description = description;
+            this.dueDate = dueDate;
+            this.priority = priority;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public void setDueDate(LocalDate dueDate) {
+            this.dueDate = dueDate;
+        }
+
+        public void setPriority(Priority priority) {
+            this.priority = priority;
+        }
+
+        @Override
+        public String toString() {
+            return "Task{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", dueDate=" + dueDate +
+                    ", priority=" + priority +
+                    '}';
+        }
+    }
+
+    // Kontroler
+    public static class TaskController {
+        private List<Task> tasks;
+        private int nextId;
+
+        public TaskController() {
+            tasks = new ArrayList<>();
+            nextId = 1;
+        }
+
+        public void addTask(String title, String description, LocalDate dueDate, Task.Priority priority) {
+            Task task = new Task(nextId++, title, description, dueDate, priority);
+            tasks.add(task);
+        }
+
+        public void removeTask(int id) {
+            tasks.removeIf(task -> task.getId() == id);
+        }
+
+        public void editTask(int id, String title, String description, LocalDate dueDate, Task.Priority priority) {
+            for (Task task : tasks) {
+                if (task.getId() == id) {
+                    task.setTitle(title);
+                    task.setDescription(description);
+                    task.setDueDate(dueDate);
+                    task.setPriority(priority);
+                    break;
+                }
+            }
+        }
+
+        public List<Task> getAllTasks() {
+            return new ArrayList<>(tasks);
+        }
+
+        public List<Task> getTasksByPriority(Task.Priority priority) {
+            return tasks.stream()
+                    .filter(task -> task.getPriority() == priority)
+                    .collect(Collectors.toList());
+        }
+
+        public List<Task> getTasksByDueDate(LocalDate dueDate) {
+            return tasks.stream()
+                    .filter(task -> task.getDueDate().equals(dueDate))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    // Widok
+    public static class TaskView {
+        private TaskController controller;
+        private Scanner scanner;
+
+        public TaskView(TaskController controller) {
+            this.controller = controller;
+            this.scanner = new Scanner(System.in);
+        }
+
+        public void displayMenu() {
+            while (true) {
+                System.out.println("1. Add Task");
+                System.out.println("2. Remove Task");
+                System.out.println("3. Edit Task");
+                System.out.println("4. View All Tasks");
+                System.out.println("5. View Tasks by Priority");
+                System.out.println("6. View Tasks by Due Date");
+                System.out.println("7. Exit");
+                System.out.print("Choose an option: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        addTask();
+                        break;
+                    case 2:
+                        removeTask();
+                        break;
+                    case 3:
+                        editTask();
+                        break;
+                    case 4:
+                        viewAllTasks();
+                        break;
+                    case 5:
+                        viewTasksByPriority();
+                        break;
+                    case 6:
+                        viewTasksByDueDate();
+                        break;
+                    case 7:
+                        return;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                }
+            }
+        }
+
+        private void addTask() {
+            System.out.print("Enter title: ");
+            String title = scanner.nextLine();
+            System.out.print("Enter description: ");
+            String description = scanner.nextLine();
+            System.out.print("Enter due date (YYYY-MM-DD): ");
+            LocalDate dueDate = LocalDate.parse(scanner.nextLine());
+            System.out.print("Enter priority (LOW, MEDIUM, HIGH): ");
+            Task.Priority priority = Task.Priority.valueOf(scanner.nextLine().toUpperCase());
+
+            controller.addTask(title, description, dueDate, priority);
+            System.out.println("Task added successfully.");
+        }
+
+        private void removeTask() {
+            System.out.print("Enter task ID to remove: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            controller.removeTask(id);
+            System.out.println("Task removed successfully.");
+        }
+
+        private void editTask() {
+            System.out.print("Enter task ID to edit: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            System.out.print("Enter new title: ");
+            String title = scanner.nextLine();
+            System.out.print("Enter new description: ");
+            String description = scanner.nextLine();
+            System.out.print("Enter new due date (YYYY-MM-DD): ");
+            LocalDate dueDate = LocalDate.parse(scanner.nextLine());
+            System.out.print("Enter new priority (LOW, MEDIUM, HIGH): ");
+            Task.Priority priority = Task.Priority.valueOf(scanner.nextLine().toUpperCase());
+
+            controller.editTask(id, title, description, dueDate, priority);
+            System.out.println("Task edited successfully.");
+        }
+
+        private void viewAllTasks() {
+            List<Task> tasks = controller.getAllTasks();
+            tasks.forEach(System.out::println);
+        }
+
+        private void viewTasksByPriority() {
+            System.out.print("Enter priority (LOW, MEDIUM, HIGH): ");
+            Task.Priority priority = Task.Priority.valueOf(scanner.nextLine().toUpperCase());
+
+            List<Task> tasks = controller.getTasksByPriority(priority);
+            tasks.forEach(System.out::println);
+        }
+
+        private void viewTasksByDueDate() {
+            System.out.print("Enter due date (YYYY-MM-DD): ");
+            LocalDate dueDate = LocalDate.parse(scanner.nextLine());
+
+            List<Task> tasks = controller.getTasksByDueDate(dueDate);
+            tasks.forEach(System.out::println);
+        }
+    }
+
+    // Main
+    public static void main(String[] args) {
+        TaskController controller = new TaskController();
+        TaskView view = new TaskView(controller);
+        view.displayMenu();
+    }
+}
