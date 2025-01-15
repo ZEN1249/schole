@@ -1,0 +1,70 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Book {
+    String title;
+    int totalPages;
+    int daysToRead;
+
+    public Book(String title, int totalPages, int daysToRead) {
+        this.title = title;
+        this.totalPages = totalPages;
+        this.daysToRead = daysToRead;
+    }
+}
+
+public class ReadingPlan {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Book> books = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Dodaj książkę");
+            System.out.println("2. Wyświetl książki i plany czytania");
+            System.out.println("3. Wyjście");
+            System.out.print("Wybierz opcję: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Konsumuje nową linię
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Podaj tytuł książki: ");
+                    String title = scanner.nextLine();
+
+                    System.out.print("Podaj liczbę stron: ");
+                    int totalPages = scanner.nextInt();
+
+                    System.out.print("Podaj liczbę dni na przeczytanie: ");
+                    int daysToRead = scanner.nextInt();
+                    scanner.nextLine(); // Konsumuje nową linię
+
+                    books.add(new Book(title, totalPages, daysToRead));
+                    System.out.println("Książka dodana!");
+                    break;
+
+                case 2:
+                    if (books.isEmpty()) {
+                        System.out.println("Nie dodano jeszcze żadnych książek.");
+                    } else {
+                        for (Book book : books) {
+                            int dailyPages = (int) Math.ceil((double) book.totalPages / book.daysToRead);
+                            System.out.println("\nTytuł: " + book.title);
+                            System.out.println("Liczba stron: " + book.totalPages);
+                            System.out.println("Liczba dni na czytanie: " + book.daysToRead);
+                            System.out.println("Musisz czytać około " + dailyPages + " stron dziennie.");
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Do zobaczenia!");
+                    scanner.close();
+                    return;
+
+                default:
+                    System.out.println("Nieprawidłowa opcja. Spróbuj ponownie.");
+            }
+        }
+    }
+}
