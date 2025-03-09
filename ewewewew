@@ -1,0 +1,148 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+struct Bonus {
+    string name;
+    string type;
+    int value;
+    int acqChance;
+    int effChance;
+};
+
+void saveProgress(int stage, int health) {
+    ofstream outFile("progress.txt", ios::app);
+    if (outFile.is_open()) {
+        outFile << "Etap " << stage << " - Zdrowie: " << health << endl;
+        outFile.close();
+    } else {
+        cout << "Nie mozna zapisac postepu." << endl;
+    }
+}
+
+int loadProgress(int &health) {
+    ifstream inFile("progress.txt");
+    int lastStage = 0, lastHealth = 100;
+    string line;
+    while (getline(inFile, line)) {
+        sscanf(line.c_str(), "Etap %d - Zdrowie: %d", &lastStage, &lastHealth);
+    }
+    inFile.close();
+    health = lastHealth;
+    return lastStage;
+}
+
+void printColoredPercentage(int value) {
+    if (value < 30) {
+        cout << "\033[1;31m"; // Czerwony
+    } else if (value >= 30 && value <= 60) {
+        cout << "\033[1;33m"; // Zolty
+    } else {
+        cout << "\033[1;32m"; // Zielony
+    }
+    cout << value << "%\033[0m";
+}
+
+int main() {
+    srand(static_cast<unsigned int>(time(0)));
+    int health = 100;
+    int startStage = 0;
+
+    cout << "Czy chcesz wczytac zapis? (1 - Tak, 0 - Nie): ";
+    int loadChoice;
+    cin >> loadChoice;
+    if (loadChoice == 1) {
+        startStage = loadProgress(health);
+        cout << "Wczytano zapis. Rozpoczynasz od etapu " << startStage + 1 << " ze zdrowiem " << health << "." << endl;
+    }
+    
+    vector<string> locations = {"Wioska", "Pustynia", "Las", "Jaskinia", "Zamek"};
+    random_shuffle(locations.begin(), locations.end());
+    
+    vector<string> altDesc = {
+        "Przed toba stoi tajemnicza droga.",
+        "Zauwazasz dziwne znaki na ziemi.",
+        "Slyszysz odglosy z pobliskiego lasu.",
+        "Czujesz, ze cos tu jest nie tak."
+    };
+    
+    for (int stage = startStage; stage < 5; stage++) {
+        cout << "========================================" << endl;
+        cout << "Etap " << stage + 1 << endl;
+        string currentLocation = locations[stage];
+        cout << "Lokalizacja: " << currentLocation << endl;
+        
+        int stageDamage = rand() % 6 + (stage * 5);
+        health -= stageDamage;
+        cout << "W tej lokalizacji tracisz " << stageDamage << " punktow zdrowia." << endl;
+        cout << "Aktualne zdrowie: " << health << endl << endl;
+        
+        random_shuffle(altDesc.begin(), altDesc.end());
+        cout << "Wybierz jedna z dwoch opcji:" << endl;
+        cout << "1. " << altDesc[0] << endl;
+        cout << "2. " << altDesc[1] << endl;
+        cout << "Twoj wybor (1 lub 2): ";
+        int choice;
+        cin >> choice;
+        if(choice != 1 && choice != 2) choice = 1;
+        int altEffect = (rand() % 41) - 20;
+        health += altEffect;
+        cout << "Twoja decyzja przyniosla " << ((altEffect >= 0) ? " +" : "") << altEffect << " punktow zdrowia." << endl;
+        
+        vector<string> healNames = {"Medyczny Eliksir", "Ziolowy Napar", "Regenerujaca Kropla"};
+        vector<string> damageNames = {"Trujaca Mikstura", "Cierniowy Amulet", "Morderczy Eliksir"};
+        
+        vector<Bonus> bonusPool;
+        for (auto& name : healNames) {
+            bonusPool.push_back({name, "heal", rand() % 21 + 10, rand() % 71 + 30, rand() % 71 + 30});
+        }
+        for (auto& name : damageNames) {
+            bonusPool.push_back({name, "damage", rand() % 16 + 5, rand() % 71 + 30, rand() % 71 + 30});
+        }
+        random_shuffle(bonusPool.begin(), bonusPool.end());
+        
+        cout << "Dostepne bonusy:" << endl;
+        for (int i = 0; i < 2; i++) {
+            cout << i + 1 << ". " << bonusPool[i].name << " - Bonus zdrowia: "
+                 << ((bonusPool[i].type == "heal") ? "+" : "-") << bonusPool[i].value
+                 << " (szansa na otrzymanie: ";
+            printColoredPercentage(bonusPool[i].acqChance);
+            cout << ", szansa dzialania: ";
+            printColoredPercentage(bonusPool[i].effChance);
+            cout << ")" << endl;
+        }
+        
+        cout << "Wybierz bonus (1 lub 2): ";
+        int bonusChoice;
+        cin >> bonusChoice;
+        if(bonusChoice != 1 && bonusChoice != 2) bonusChoice = 1;
+        
+        Bonus chosenBonus = bonusPool[bonusChoice - 1];
+        cout << "Przetwarzanie bonusu: " << chosenBonus.name << " - ";
+        
+        if (rand() % 100 < chosenBonus.acqChance) {
+            cout << "Otrzymano bonus. ";
+            if (rand() % 100 < chosenBonus.effChance) {
+                health += (chosenBonus.type == "heal") ? chosenBonus.value : -chosenBonus.value;
+                cout << "Dzialal bonus, " << ((chosenBonus.type == "heal") ? "dodano " : "odjeto ") << chosenBonus.value << " punktow zdrowia.";
+            } else {
+                cout << "Bonus nie zadzialal.";
+            }
+        } else {
+            cout << "Nie otrzymano bonusu.";
+        }
+        cout << endl;
+        cout << "Aktualne zdrowie po zastosowaniu bonusu: " << health << endl;
+        saveProgress(stage + 1, health);
+        cout << "========================================" << endl << endl;
+    }
+    
+    cout << "Przygoda zakonczona. Twoje zdrowie koncowe: " << health << endl;
+    return 0;
+}
