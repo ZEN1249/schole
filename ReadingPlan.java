@@ -14,7 +14,7 @@ public class ReadingPlan {
         while (true) {
             displayMenu();
             int choice = scanner.nextInt();
-            scanner.nextLine(); // konsumuje nową linię
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -49,7 +49,7 @@ public class ReadingPlan {
 
         System.out.print("Podaj liczbę dni na przeczytanie: ");
         int daysToRead = scanner.nextInt();
-        scanner.nextLine(); // konsumuje nową linię
+        scanner.nextLine();
 
         System.out.print("Czy jest to książka fabularna? (tak/nie): ");
         String isFiction = scanner.nextLine().trim().toLowerCase();
