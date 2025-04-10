@@ -1,70 +1,147 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Book {
-    String title;
-    int totalPages;
-    int daysToRead;
-
-    public Book(String title, int totalPages, int daysToRead) {
-        this.title = title;
-        this.totalPages = totalPages;
-        this.daysToRead = daysToRead;
-    }
-}
-
 public class ReadingPlan {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Book> books = new ArrayList<>();
+    // POLIMORFIZM: lista Book może zawierać zarówno Book, jak i FictionBook
+    private ArrayList<Book> books;
+    private Scanner scanner;
+    private final String FILE_NAME = "books.txt";
 
+    public ReadingPlan() {
+        books = new ArrayList<>();
+        scanner = new Scanner(System.in);
+        loadBooksFromFile(); // POLIMORFIZM: odczytujemy różne typy (Book/FictionBook) i przechowujemy w jednej liście
+    }
+
+    public void run() {
         while (true) {
-            System.out.println("\nMenu:");
-            System.out.println("1. Dodaj książkę");
-            System.out.println("2. Wyświetl książki i plany czytania");
-            System.out.println("3. Wyjście");
-            System.out.print("Wybierz opcję: ");
+            displayMenu();
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Konsumuje nową linię
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Podaj tytuł książki: ");
-                    String title = scanner.nextLine();
-
-                    System.out.print("Podaj liczbę stron: ");
-                    int totalPages = scanner.nextInt();
-
-                    System.out.print("Podaj liczbę dni na przeczytanie: ");
-                    int daysToRead = scanner.nextInt();
-                    scanner.nextLine(); // Konsumuje nową linię
-
-                    books.add(new Book(title, totalPages, daysToRead));
-                    System.out.println("Książka dodana!");
+                    addBook(); // dodaje Book lub FictionBook
                     break;
-
                 case 2:
-                    if (books.isEmpty()) {
-                        System.out.println("Nie dodano jeszcze żadnych książek.");
-                    } else {
-                        for (Book book : books) {
-                            int dailyPages = (int) Math.ceil((double) book.totalPages / book.daysToRead);
-                            System.out.println("\nTytuł: " + book.title);
-                            System.out.println("Liczba stron: " + book.totalPages);
-                            System.out.println("Liczba dni na czytanie: " + book.daysToRead);
-                            System.out.println("Musisz czytać około " + dailyPages + " stron dziennie.");
-                        }
-                    }
+                    displayBooks(); // POLIMORFIZM: wywołanie metody displayInfo() na obiektach o różnych typach
                     break;
-
                 case 3:
-                    System.out.println("Do zobaczenia!");
-                    scanner.close();
+                    exit();
                     return;
-
                 default:
                     System.out.println("Nieprawidłowa opcja. Spróbuj ponownie.");
             }
         }
+    }
+
+    private void displayMenu() {
+        System.out.println("\nMenu:");
+        System.out.println("1. Dodaj książkę");
+        System.out.println("2. Wyświetl książki i plany czytania");
+        System.out.println("3. Wyjście");
+        System.out.print("Wybierz opcję: ");
+    }
+
+    private void addBook() {
+        System.out.print("Podaj tytuł książki: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Podaj liczbę stron: ");
+        int totalPages = scanner.nextInt();
+
+        System.out.print("Podaj liczbę dni na przeczytanie: ");
+        int daysToRead = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Podaj ocenę książki (1-5) lub 0 jeśli nie chcesz oceniać: ");
+        int rating = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Czy jest to książka fabularna? (tak/nie): ");
+        String isFiction = scanner.nextLine().trim().toLowerCase();
+
+        if (isFiction.equals("tak")) {
+            System.out.print("Podaj gatunek książki: ");
+            String genre = scanner.nextLine();
+
+            // POLIMORFIZM: obiekt FictionBook dodany do listy typu Book
+            books.add(new FictionBook(title, totalPages, daysToRead, rating, genre));
+        } else {
+            books.add(new Book(title, totalPages, daysToRead, rating));
+        }
+
+        System.out.println("Książka dodana!");
+    }
+
+    private void displayBooks() {
+        if (books.isEmpty()) {
+            System.out.println("Nie dodano jeszcze żadnych książek.");
+        } else {
+            for (Book book : books) {
+                // POLIMORFIZM: wywołuje displayInfo() właściwy dla Book lub FictionBook
+                book.displayInfo(); 
+            }
+        }
+    }
+
+    private void exit() {
+        saveBooksToFile();
+        System.out.println("Dane zapisane. Do zobaczenia!");
+        scanner.close();
+    }
+
+    private void saveBooksToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            for (Book book : books) {
+                if (book instanceof FictionBook) {
+                    // POLIMORFIZM + rzutowanie do FictionBook
+                    FictionBook fb = (FictionBook) book;
+                    writer.write("F;" + fb.title + ";" + fb.totalPages + ";" + fb.daysToRead + ";" + fb.rating + ";" + fb.getGenre());
+                } else {
+                    writer.write("N;" + book.title + ";" + book.totalPages + ";" + book.daysToRead + ";" + book.rating);
+                }
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Błąd podczas zapisu do pliku: " + e.getMessage());
+        }
+    }
+
+    private void loadBooksFromFile() {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts[0].equals("F")) {
+                    // POLIMORFIZM: tworzenie FictionBook i dodawanie do listy Book
+                    books.add(new FictionBook(
+                            parts[1],
+                            Integer.parseInt(parts[2]),
+                            Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4]),
+                            parts[5]
+                    ));
+                } else if (parts[0].equals("N")) {
+                    books.add(new Book(
+                            parts[1],
+                            Integer.parseInt(parts[2]),
+                            Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4])
+                    ));
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Błąd podczas wczytywania danych: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        ReadingPlan readingPlan = new ReadingPlan();
+        readingPlan.run();
     }
 }
