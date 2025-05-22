@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+    $k = 15;
+    if($k >=18){
+        echo "mozesz odwiedzac strony dla doroslych";
+    }else{
+        echo "<a href=\"https://www.google.com\" target=\"_blank\">GOOGLE</a>";
+    };
+    ?>
+</body>
+</html>
