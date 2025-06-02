@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+string szyfrCezara(string tekst, int przesuniecie, bool dekodowanie = false) {
+    string wynik = "";
+
+    // Jeśli dekodujemy, odwracamy kierunek przesunięcia
+    if (dekodowanie) {
+        przesuniecie = 26 - (przesuniecie % 26);
+    }
+
+    for (char znak : tekst) {
+        if (isalpha(znak)) {
+            char baza = isupper(znak) ? 'A' : 'a';
+            znak = (znak - baza + przesuniecie) % 26 + baza;
+        }
+        // znaki niealfabetyczne zostają bez zmian
+        wynik += znak;
+    }
+
+    return wynik;
+}
+
+int main() {
+    string tekst;
+    int przesuniecie;
+    int wybor;
+
+    do {
+        cout << "=== SZYFR CEZARA ===" << endl;
+        cout << "1. Zakoduj tekst" << endl;
+        cout << "2. Odkoduj tekst" << endl;
+        cout << "3. Zakoncz program" << endl;
+        cout << "Wybierz opcje (1-3): ";
+        cin >> wybor;
+        cin.ignore(); // Usuwa enter z bufora po cin
+
+        if (wybor == 1 || wybor == 2) {
+            cout << "Podaj tekst: ";
+            getline(cin, tekst);
+
+            cout << "Podaj przesuniecie (np. 3): ";
+            cin >> przesuniecie;
+            cin.ignore(); // znów czyścimy bufor
+
+            bool dekoduj = (wybor == 2);
+            string wynik = szyfrCezara(tekst, przesuniecie, dekoduj);
+
+            cout << (dekoduj ? "Odkodowany" : "Zakodowany") << " tekst: " << wynik << endl;
+        }
+
+        cout << endl;
+
+    } while (wybor != 3);
+
+    cout << "Zakonczono program." << endl;
+    return 0;
+}
