@@ -1,0 +1,148 @@
+import java.util.*;
+
+// ------------------------- Punkt startowy -------------------------
+// (Zarządzanie złożonością) – tu zaczyna się aplikacja, reszta logiki jest w klasach niżej.
+public class Main {
+    public static void main(String[] args) {
+        FleetManager manager = new FleetManager();   // klasa zarządzająca flotą i rezerwacjami
+        manager.seedSampleData();                    // dodajemy przykładowe dane
+
+        Scanner sc = new Scanner(System.in);
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\n=== MENU ===");
+            System.out.println("1. Pokaż flotę");
+            System.out.println("2. Pokaż szczegóły samolotu");
+            System.out.println("3. Rezerwacja");
+            System.out.println("0. Wyjście");
+            System.out.print("Wybór: ");
+
+            String choice = sc.nextLine();
+            switch (choice) {
+                case "1" -> manager.printFleet();
+                case "2" -> {
+                    System.out.print("Podaj ID: ");
+                    String id = sc.nextLine();
+                    Aircraft a = manager.findById(id);
+                    if (a != null) a.displayDetails(); // Polimorfizm – każdy typ samolotu pokazuje inaczej
+                    else System.out.println("Nie znaleziono.");
+                }
+                case "3" -> {
+                    System.out.print("Podaj ID samolotu: ");
+                    String id = sc.nextLine();
+                    Aircraft a = manager.findById(id);
+                    if (a == null || !a.isAvailable()) {
+                        System.out.println("Samolot niedostępny.");
+                    } else {
+                        System.out.print("Imię klienta: ");
+                        String name = sc.nextLine();
+                        Customer c = new Customer(name); // Enkapsulacja – dane klienta w osobnej klasie
+                        manager.createBooking(a, c);
+                    }
+                }
+                case "0" -> running = false;
+                default -> System.out.println("Nieznana opcja.");
+            }
+        }
+    }
+}
+
+// ------------------------- Model domeny -------------------------
+
+// (Reużywalność kodu) – klasa bazowa dla samolotów
+abstract class Aircraft {
+    private final String id = UUID.randomUUID().toString(); // Enkapsulacja – prywatne pole
+    private String model;
+    private boolean available = true;
+
+    public Aircraft(String model) { this.model = model; }
+
+    // gettery i settery – (Enkapsulacja: kontrolowany dostęp do pól)
+    public String getId() { return id; }
+    public String getModel() { return model; }
+    public boolean isAvailable() { return available; }
+    public void setAvailable(boolean available) { this.available = available; }
+
+    // Polimorfizm – każda podklasa musi sama opisać szczegóły
+    public abstract void displayDetails();
+}
+
+// (Dziedziczenie) – klasa LightJet rozszerza klasę Aircraft
+class LightJet extends Aircraft {
+    public LightJet(String model) { super(model); }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("-- Light Jet --");
+        System.out.println("ID: " + getId());
+        System.out.println("Model: " + getModel());
+    }
+}
+
+// (Dziedziczenie) – inny typ samolotu
+class HeavyJet extends Aircraft {
+    public HeavyJet(String model) { super(model); }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("-- Heavy Jet --");
+        System.out.println("ID: " + getId());
+        System.out.println("Model: " + getModel());
+    }
+}
+
+// Klasa Customer – (Modelowanie rzeczywistości: klient)
+class Customer {
+    private String name; // Enkapsulacja – prywatne pole
+
+    public Customer(String name) { this.name = name; }
+    public String getName() { return name; }
+}
+
+// Klasa Booking – (Modelowanie procesu wypożyczenia)
+class Booking {
+    private Aircraft aircraft;
+    private Customer customer;
+
+    public Booking(Aircraft aircraft, Customer customer) {
+        this.aircraft = aircraft;
+        this.customer = customer;
+    }
+
+    @Override
+    public String toString() {
+        return "Rezerwacja: " + customer.getName() + " -> " + aircraft.getModel();
+    }
+}
+
+// Klasa FleetManager – (Zarządzanie złożonością: oddzielna odpowiedzialność)
+class FleetManager {
+    private List<Aircraft> fleet = new ArrayList<>();
+    private List<Booking> bookings = new ArrayList<>();
+
+    public void seedSampleData() {
+        fleet.add(new LightJet("Cessna Mustang")); // prosty przykład
+        fleet.add(new HeavyJet("Gulfstream G650"));
+    }
+
+    public void printFleet() {
+        for (Aircraft a : fleet) {
+            System.out.println(a.getId() + " | " + a.getModel() + " | Dostępny: " + a.isAvailable());
+        }
+    }
+
+    public Aircraft findById(String id) {
+        for (Aircraft a : fleet) {
+            if (a.getId().equals(id)) return a;
+        }
+        return null;
+    }
+
+    public void createBooking(Aircraft a, Customer c) {
+        Booking b = new Booking(a, c);
+        bookings.add(b);
+        a.setAvailable(false);
+        System.out.println("Dodano " + b);
+    }
+}
