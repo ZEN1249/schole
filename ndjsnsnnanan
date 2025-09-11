@@ -1,0 +1,20 @@
+System Zarządzania Flotą Prywatnych Samolotów
+
+Opis projektu:
+Projekt to prosta aplikacja konsolowa w Javie, która pozwala na zarządzanie flotą prywatnych samolotów. Użytkownik może przeglądać dostępne samoloty, sprawdzać ich szczegóły oraz dokonywać rezerwacji na wybrane maszyny. Każdy samolot posiada unikalne ID, model i status dostępności. Klient, który dokonuje rezerwacji, jest reprezentowany przez klasę Customer, a proces wynajmu przez klasę Booking. Za obsługę floty i rezerwacji odpowiada klasa FleetManager, co pozwala utrzymać przejrzystość i podział odpowiedzialności w aplikacji.
+
+W projekcie zastosowano podstawowe zasady programowania obiektowego:
+	•	Reużywalność kodu – wspólna klasa bazowa Aircraft.
+	•	Modelowanie rzeczywistości – klasy odzwierciedlające klientów, samoloty i rezerwacje.
+	•	Enkapsulacja – prywatne pola oraz gettery i settery.
+	•	Zarządzanie złożonością – wydzielenie klasy FleetManager do logiki biznesowej.
+	•	Polimorfizm – różne implementacje metody displayDetails() w LightJet i HeavyJet.
+	•	Dziedziczenie – klasy LightJet i HeavyJet dziedziczą po Aircraft.
+
+Plany rozwoju:
+	•	Dodanie większej ilości typów samolotów (np. średnie odrzutowce, turbośmigłowe).
+	•	Rozszerzenie systemu rezerwacji o daty rozpoczęcia i zakończenia wynajmu.
+	•	Wprowadzenie cen wynajmu i kalkulacji kosztów dla klienta.
+	•	Możliwość anulowania rezerwacji.
+	•	Zapis i odczyt danych (np. do pliku lub bazy danych), aby rezerwacje nie ginęły po zamknięciu programu.
+	•	Prostsze menu użytkownika z możliwością powrotu do poprzednich opcji.
