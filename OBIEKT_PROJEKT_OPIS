@@ -1,0 +1,11 @@
+System Zarządzania Flotą Prywatnych Samolotów
+
+Opis: Stwórz aplikację do zarządzania flotą prywatnych samolotów, która umożliwia wynajem samolotów, przeglądanie dostępnych maszyn i śledzenie historii rezerwacji.
+
+Zasady do zastosowania:
+	•	Reużywalność kodu: Stwórz klasy bazowe dla samolotów, klientów i rezerwacji, które mogą być później rozszerzane lub używane w innych częściach aplikacji (np. klasa Aircraft, z której dziedziczą LightJet i HeavyJet).
+	•	Modelowanie rzeczywistości: Modeluj rzeczywiste obiekty, takie jak: samoloty (LightJet, HeavyJet), klienci (Customer), proces rezerwacji (Booking).
+	•	Enkapsulacja: Ukryj implementację szczegółów wewnętrznych klas, takich jak pola (id, model, available w Aircraft albo name w Customer), i umożliw dostęp do nich tylko przez publiczne metody (gettery i settery).
+	•	Zarządzanie złożonością: Rozdziel aplikację na klasy odpowiedzialne za różne funkcje (np. klasa FleetManager do obsługi samolotów i rezerwacji, klasa Booking do zarządzania procesem wynajmu).
+	•	Polimorfizm: Stwórz różne klasy dziedziczące po wspólnej klasie Aircraft (np. LightJet, HeavyJet), gdzie każda z nich może mieć własną implementację metody displayDetails().
+	•	Dziedziczenie: Stwórz hierarchię klas, np. Aircraft jako klasa bazowa, a LightJet i HeavyJet jako klasy pochodne, które dziedziczą wspólne cechy (np. model, id, availability).
