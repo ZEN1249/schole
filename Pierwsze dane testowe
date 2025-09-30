@@ -1,0 +1,18 @@
+Pierwsze dane testowe
+
+Przykładowa flota samolotów:
+-LightJet: Cessna Mustang
+-HeavyJet: Gulfstream G650
+-LightJet: Pilatus PC-24
+-HeavyJet: Bombardier Global 7500
+
+Przykładowi klienci:
+Jan Kowalski
+Anna Nowak
+
+Przykładowe scenariusze testowe:
+-Wyświetlenie listy floty
+-Pobranie szczegółów samolotu po ID
+-Zarezerwowanie dostępnego samolotu dla Jana Kowalskiego i sprawdzenie, że status dostępności zmienił się na niedostępny
+-Próba rezerwacji tego samego samolotu ponownie — system powinien poinformować, że samolot jest niedostępny
+-Dodanie rezerwacji dla innych klientów i sprawdzenie poprawności listy rezerwacji
