@@ -1,0 +1,26 @@
+Private Jet Charter to prosta aplikacja konsolowa, której celem jest zarządzanie flotą prywatnych samolotów oraz procesem rezerwacji.
+System został zaprojektowany tak, aby odwzorowywać rzeczywiste procesy związane z wynajmem samolotów i zapewniać czytelną strukturę kodu.
+Aplikacja opiera się na podziale na klasy reprezentujące główne elementy domeny oraz klasy zarządzające logiką systemu.
+
+W systemie przewidziano następujące klasy:
+-Aircraft (klasa bazowa dla wszystkich samolotów, przechowująca informacje o identyfikatorze, modelu i dostępności)
+-LightJet oraz HeavyJet (podklasy samolotów, rozszerzające klasę Aircraft i implementujące własny sposób prezentacji szczegółów)
+-Customer (klasa reprezentująca klienta, przechowująca jego dane)
+-Booking (klasa powiązania między klientem a samolotem, opisująca rezerwację)
+-FleetManager (klasa zarządzająca flotą i rezerwacjami, odpowiedzialna za wyszukiwanie samolotów, tworzenie rezerwacji i przechowywanie danych)
+
+Funkcje aplikacji obejmują:
+-wyświetlanie listy samolotów dostępnych w systemie
+-prezentację szczegółowych informacji o wybranym samolocie
+-tworzenie rezerwacji dla klienta i blokowanie dostępności samolotu
+-przechowywanie historii rezerwacji
+-możliwość dalszej rozbudowy o anulowanie rezerwacji, raportowanie oraz rozróżnienie ról użytkowników
+
+Typy użytkowników w obecnej wersji ograniczają się do operatora systemu obsługującego menu konsolowe. W kolejnych etapach rozwoju mogą pojawić się różne role, np. klient końcowy, administrator czy operator techniczny.
+
+Typy samolotów przewidziane w systemie to LightJet i HeavyJet. LightJet reprezentuje lżejsze, mniejsze maszyny przeznaczone dla krótszych lotów, natomiast HeavyJet to cięższe i bardziej luksusowe samoloty dalekiego zasięgu.
+Architektura systemu jest otwarta na dodawanie kolejnych typów, takich jak Turboprop, Airliner czy Helicopter.
+
+Podsumowując, aplikacja Private Jet Charter pełni funkcję podstawowego systemu zarządzania flotą i rezerwacjami.
+Jej zadaniem jest umożliwienie łatwego przeglądania dostępnych samolotów, zarządzania rezerwacjami i obsługi klientów.
+Dzięki modularnej budowie i zastosowaniu dziedziczenia oraz polimorfizmu, aplikacja jest gotowa do dalszej rozbudowy w kierunku pełnego systemu rezerwacji lotów prywatnych.
