@@ -1,13 +1,13 @@
-Private Jet Charter to prosta aplikacja konsolowa, której celem jest zarządzanie flotą prywatnych samolotów oraz procesem rezerwacji.
+ Private Jet Charter to prosta aplikacja konsolowa, której celem jest zarządzanie flotą prywatnych samolotów oraz procesem rezerwacji.
 System został zaprojektowany tak, aby odwzorowywać rzeczywiste procesy związane z wynajmem samolotów i zapewniać czytelną strukturę kodu.
 Aplikacja opiera się na podziale na klasy reprezentujące główne elementy domeny oraz klasy zarządzające logiką systemu.
 
 W systemie przewidziano następujące klasy:
--Aircraft (klasa bazowa dla wszystkich samolotów, przechowująca informacje o identyfikatorze, modelu i dostępności)
--LightJet oraz HeavyJet (podklasy samolotów, rozszerzające klasę Aircraft i implementujące własny sposób prezentacji szczegółów)
--Customer (klasa reprezentująca klienta, przechowująca jego dane)
--Booking (klasa powiązania między klientem a samolotem, opisująca rezerwację)
--FleetManager (klasa zarządzająca flotą i rezerwacjami, odpowiedzialna za wyszukiwanie samolotów, tworzenie rezerwacji i przechowywanie danych)
+-Aircraft (klasa bazowa dla wszystkich samolotów, przechowująca informacje o identyfikatorze, modelu i dostępności)Pola: id, model, available Metody: getId(), getModel(), isAvailable(), setAvailable(), displayDetails()
+-LightJet oraz HeavyJet (podklasy samolotów, rozszerzające klasę Aircraft i implementujące własny sposób prezentacji szczegółów)Metody: displayDetails()
+-Customer (klasa reprezentująca klienta, przechowująca jego dane)Metody: getName()
+-Booking (klasa powiązania między klientem a samolotem, opisująca rezerwację)Pola: aircraft, customer Metody: toString()
+-FleetManager (klasa zarządzająca flotą i rezerwacjami, odpowiedzialna za wyszukiwanie samolotów, tworzenie rezerwacji i przechowywanie danych)Metody: seedSampleData(), printFleet(), findById(), createBooking()
 
 Funkcje aplikacji obejmują:
 -wyświetlanie listy samolotów dostępnych w systemie
