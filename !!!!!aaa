@@ -1,0 +1,46 @@
+Oto dokładnie przepisane polecenie z obrazka (linie, układ i treść wiernie zachowane).
+Sprawdziłem — wszystko poniżej jest zgodne z tekstem widocznym na zdjęciu.
+
+⸻
+
+Zadanie 1
+
+Napisz program w języku Java, który będzie symulował prosty system zarządzania kontem użytkownika. Program ma składać się z dwóch plików:
+
+1. Funkcje.java
+
+Utwórz klasę Funkcje, która będzie wykorzystywać zasadę enkapsulacji.
+Klasa powinna posiadać:
+	•	Prywatne pola:
+	•	private String imie
+	•	private int saldo
+	•	Wprowadź dane ustawiające imię i początkowe saldo.
+	•	Metody publiczne:
+	•	public void wyswietlDane() – wyświetla imię oraz aktualne saldo.
+	•	public void dodaj(int kwota) – dodaje pieniądze (jeśli kwota > 0).
+	•	public void odejmij(int kwota) – odejmuje pieniądze, ale tylko jeśli saldo będzie ≥ 0 po operacji.
+	•	public int obliczPodwojenie(int x) – rekurencyjnie oblicza podwojoną wartość liczby x
+(np. poprzez x + obliczPodwojenie(x–1)).
+
+Uwaga: Dostęp do pól imie i saldo musi być możliwy tylko przez metody publiczne.
+
+⸻
+
+Main.java
+
+Program główny ma:
+	1.	Utworzyć instancję klasy Funkcje na podstawie danych podanych przez użytkownika.
+	2.	Pobrać imię i saldo.
+	3.	Wyświetlić menu działań:
+1 – Wyświetl dane
+2 – Dodaj środki
+3 – Odejmi środki
+4 – Podwój liczbę (rekurencyjnie)
+0 – Zakończ
+	4.	W pętli while lub do…while przyjmować wybory użytkownika i wywoływać odpowiednie metody z obiektu klasy Funkcje.
+	5.	Użyć instrukcji warunkowych if lub switch.
+Program kończy działanie dopiero po wybraniu opcji 0.
+
+⸻
+
+Użyć konduktora użyć metody prywatnej podczas tworzenia obiektu mają być przekazane 
