@@ -1,0 +1,33 @@
+Bank Management System:
+
+Co to jest:
+Bank Management System stanowi aplikację działającą w trybie konsolowym, dedykowaną obsłudze rachunków bankowych, klientów oraz transakcji pieniężnych
+Oprogramowanie symuluje fundamentalne mechanizmy funkcjonujące w instytucji bankowej, w tym zakładanie rachunków, dokonywanie wpłat, wypłat oraz transferów środków pomiędzy kontami
+Budowa aplikacji opiera się na abstrakcyjnych klasach symbolizujących kluczowe komponenty systemu, wspartych przez klasy konkretne odpowiedzialne za implementację szczegółowych operacji
+Informacje są utrwalane w pliku tekstowym, co zapewnia ich zachowanie po zakończeniu sesji programu
+
+Struktura systemu:
+System bazuje na podziale na abstrakcyjne struktury odzwierciedlające konta, użytkowników, transakcje oraz karty płatnicze
+Dane są magazynowane i wczytywane z pliku tekstowego, gwarantując ich trwałość i dostępność
+
+Funkcje aplikacji:
+-Zakładanie nowego rachunku bankowego
+-Prezentacja wykazu istniejących kont
+-Realizacja wpłat i wypłat środków
+-Wykonywanie przelewów pomiędzy rachunkami
+-Łączenie kart płatniczych z kontami
+-Zapisywanie danych w pliku
+-Wczytywanie informacji z pliku podczas uruchamiania
+
+Typy użytkowników:
+W aktualnej wersji system jest sterowany przez użytkownika poprzez interfejs menu konsolowego
+Istnieje możliwość rozszerzenia o mechanizmy uwierzytelniania oraz przypisywania ról, takich jak klient czy administrator
+
+Architektura i założenia: 
+-Projekt wykorzystuje koncepcje dziedziczenia, polimorfizmu oraz enkapsulacji
+-Obsługa zapisu i odczytu danych z pliku tekstowego
+-Konstrukcja umożliwia dalszy rozwój, na przykład poprzez dodanie systemów logowania, naliczania oprocentowania, rejestrowania historii transakcji, weryfikacji danych lub generowania zaawansowanych raportów finansowych
+
+Podsumowanie:
+Bank Management System to elementarna aplikacja konsolowa służąca do administrowania rachunkami i operacjami finansowymi
+Dzięki zastosowaniu zasad programowania obiektowego w języku Java, projekt sprawdza się w celach dydaktycznych na poziomie szkoły średniej technicznej, ilustrując podstawy orientacji obiektowej
