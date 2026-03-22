@@ -1,0 +1,68 @@
+Szczególny opis komponentów i modułówWprowadzenie
+
+System Bank Management System w wersji podstawowej stanowi uproszczoną aplikację konsolową, której celem jest przedstawienie struktury systemu bankowego z wykorzystaniem zasad programowania obiektowego. 
+Projekt skupia się na modelowaniu danych oraz relacjach pomiędzy podstawowymi elementami systemu, takimi jak klient, konto bankowe oraz transakcja.Podział na moduły
+
+Aplikacja została podzielona na dwa główne moduły:2.1 Moduł główny (sterujący)Pakiet: bank
+Klasa: Main.java2.2 Moduł modelu danychPakiet: bank.model
+Klasy:
+Account.java
+SavingsAccount.java
+Client.java
+Transaction.javaPodział ten pozwala na oddzielenie logiki sterującej od struktury danych.Opis modułu głównego
+
+3.1 Klasa MainKlasa Main stanowi punkt wejścia do aplikacji i zawiera metodę main(), która uruchamia program.Funkcje klasy:
+tworzenie obiektów systemu (klient, konto)
+wywoływanie podstawowych operacji (wpłata, wypłata)
+wyświetlanie wyników w konsoliZnaczenie:
+Klasa ta pełni rolę interfejsu użytkownika w wersji konsolowej oraz umożliwia przetestowanie działania systemu.Moduł modelu danych
+
+Moduł bank.model zawiera klasy reprezentujące podstawowe elementy systemu bankowego.4.1 Klasa AccountTyp:
+Klasa abstrakcyjnaOpis:
+Reprezentuje ogólne konto bankowe i stanowi bazę dla innych typów kont.Pola:
+id – unikalny identyfikator konta
+balance – aktualne saldo kontaMetody:
+deposit() – umożliwia wpłatę środków
+withdraw() – umożliwia wypłatę środków
+getBalance() – zwraca saldo konta
+getId() – zwraca identyfikator kontaUzasadnienie:
+Zastosowanie klasy abstrakcyjnej pozwala na tworzenie różnych typów kont przy zachowaniu wspólnej struktury.4.2 Klasa SavingsAccountTyp:
+Klasa dziedziczącaOpis:
+Reprezentuje konto oszczędnościowe.Relacja:
+Dziedziczy po klasie Account.Uzasadnienie:
+Pozwala na zastosowanie mechanizmu dziedziczenia oraz przygotowuje system na przyszłe rozszerzenia.4.3 Klasa ClientOpis:
+Reprezentuje klienta banku.Pola:
+id – identyfikator klienta
+name – imię i nazwisko
+accounts – lista kont klientaMetody:
+addAccount() – dodaje konto do klienta
+getAccounts() – zwraca listę kontRelacje:
+Jeden klient może posiadać wiele kont (relacja jeden-do-wielu).Znaczenie:
+Klasa umożliwia powiązanie użytkownika systemu z jego rachunkami bankowymi.4.4 Klasa TransactionOpis:
+Reprezentuje pojedynczą operację finansową.Pola:
+id – identyfikator transakcji
+amount – kwota operacji
+type – typ operacji (np. wpłata, wypłata)Znaczenie:
+Klasa stanowi podstawę do implementacji historii operacji w kolejnych etapach projektu.Relacje między komponentami
+
+W systemie występują następujące zależności:
+Klasa Main korzysta z klas modelu
+Klasa Client przechowuje obiekty klasy Account
+Klasa SavingsAccount dziedziczy po klasie Account
+Klasa Transaction opisuje operacje wykonywane na kontachUzasadnienie zastosowanej architektury
+
+Zastosowana architektura opiera się na podstawowych zasadach programowania obiektowego:6.1 Enkapsulacja
+Dane są ukryte w klasach i dostępne poprzez metody.6.2 Dziedziczenie
+Klasa SavingsAccount dziedziczy po Account, co umożliwia rozszerzanie funkcjonalności.6.3 Separacja odpowiedzialności
+Main odpowiada za uruchomienie programu
+model odpowiada za daneMożliwości rozbudowy systemu
+
+Projekt został zaprojektowany w sposób umożliwiający dalszy rozwój. Możliwe rozszerzenia obejmują:
+dodanie nowych typów kont
+implementację historii transakcji
+zapis i odczyt danych z pliku
+wprowadzenie systemu logowania użytkowników
+rozbudowę interfejsu użytkownikaPodsumowanie
+
+Przedstawiona struktura projektu umożliwia modelowanie podstawowych elementów systemu bankowego oraz ich relacji. 
+Zastosowanie programowania obiektowego pozwala na stworzenie czytelnej i łatwej do rozbudowy architektury, która może być rozwijana w kolejnych etapach projektu.
