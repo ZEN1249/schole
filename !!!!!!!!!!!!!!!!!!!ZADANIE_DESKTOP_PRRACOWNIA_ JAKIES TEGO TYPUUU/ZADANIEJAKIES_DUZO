@@ -1,0 +1,190 @@
+/*
+//ZADANIE 0
+
+import java.util.Scanner;
+
+public class Zadanie0 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Podaj liczbę elementów: ");
+        int n = scanner.nextInt();
+
+        int[] tablica = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Podaj element " + i + ": ");
+            tablica[i] = scanner.nextInt();
+        }
+
+        System.out.println("Zawartość tablicy:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(tablica[i] + " ");
+        }
+
+        scanner.close();
+    }
+}
+*/
+
+
+/*
+//ZADANIE 1
+
+public class Zadanie1 {
+    public static void main(String[] args) {
+
+        int[] tab1 = {1, -5, 3, 7, -2, 0, 4, -1, 8, -9};
+        int[] tab2 = new int[10];
+
+        int indeks = 0;
+
+        for (int i = 0; i < tab1.length; i++) {
+            if (tab1[i] > 0) {
+                tab2[indeks] = tab1[i];
+                indeks++;
+            }
+        }
+
+        System.out.println("Tablica dodatnich wartości:");
+        for (int i = 0; i < indeks; i++) {
+            System.out.print(tab2[i] + " ");
+        }
+    }
+}
+*/
+
+
+/*
+//ZADANIE 2
+
+import java.util.Scanner;
+
+public class Zadanie2 {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Podaj rozmiar tablicy: ");
+        int n = scanner.nextInt();
+
+        int[] tab = new int[n];
+        int[] tab2 = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Podaj element " + i + ": ");
+            tab[i] = scanner.nextInt();
+        }
+
+        for (int i = 0; i < n; i++) {
+            tab2[i] = tab[n - 1 - i];
+        }
+
+        System.out.println("Tablica odwrócona:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(tab2[i] + " ");
+        }
+
+        scanner.close();
+    }
+}
+*/
+
+
+/*
+//ZADANIE 3
+
+import java.util.Scanner;
+
+public class Zadanie3 {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Podaj liczbę elementów: ");
+        int n = scanner.nextInt();
+
+        int[] tab = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Podaj element " + i + ": ");
+            tab[i] = scanner.nextInt();
+        }
+
+        int max = tab[0];
+        int min = tab[0];
+        int maxIndex = 0;
+        int minIndex = 0;
+        int suma = 0;
+        int dodatnie = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (tab[i] > max) {
+                max = tab[i];
+                maxIndex = i;
+            }
+
+            if (tab[i] < min) {
+                min = tab[i];
+                minIndex = i;
+            }
+
+            suma += tab[i];
+
+            if (tab[i] > 0) {
+                dodatnie++;
+            }
+        }
+
+        double srednia = (double) suma / n;
+
+        System.out.println("Największy: " + max + " (indeks: " + maxIndex + ")");
+        System.out.println("Najmniejszy: " + min + " (indeks: " + minIndex + ")");
+        System.out.println("Średnia: " + srednia);
+        System.out.println("Liczba dodatnich: " + dodatnie);
+
+        scanner.close();
+    }
+}
+*/
+
+
+/*
+//ZADANIE 4
+
+import java.util.Random;
+
+public class Zadanie4 {
+    public static void main(String[] args) {
+
+        int[] tab = new int[100];
+        Random rand = new Random();
+
+        for (int i = 0; i < 100; i++) {
+            tab[i] = rand.nextInt(999) + 1;
+        }
+
+        int liczbaPierwszych = 0;
+
+        for (int i = 0; i < 100; i++) {
+            if (czyPierwsza(tab[i])) {
+                liczbaPierwszych++;
+            }
+        }
+
+        System.out.println("Liczba liczb pierwszych: " + liczbaPierwszych);
+    }
+
+    public static boolean czyPierwsza(int liczba) {
+        if (liczba < 2) return false;
+
+        for (int i = 2; i <= Math.sqrt(liczba); i++) {
+            if (liczba % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+*/
