@@ -1,0 +1,63 @@
+/*
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        int[,] oceny = new int[5, 4];
+
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                oceny[i, j] = int.Parse(Console.ReadLine());
+            }
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                Console.Write(oceny[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            int suma = 0;
+            for (int j = 0; j < 4; j++)
+            {
+                suma += oceny[i, j];
+            }
+            Console.WriteLine((double)suma / 4);
+        }
+
+        for (int j = 0; j < 4; j++)
+        {
+            int suma = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                suma += oceny[i, j];
+            }
+            Console.WriteLine((double)suma / 5);
+        }
+
+        int max = oceny[0, 0];
+        int min = oceny[0, 0];
+
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (oceny[i, j] > max) max = oceny[i, j];
+                if (oceny[i, j] < min) min = oceny[i, j];
+            }
+        }
+
+        Console.WriteLine(max);
+        Console.WriteLine(min);
+    }
+}
+*/
