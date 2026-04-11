@@ -1,0 +1,5 @@
+f-Fields
+m*(z gwiazdka)-Constructors
+m-Methods
+p-properties
+I-inner Classes
