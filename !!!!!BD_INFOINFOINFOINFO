@@ -1,0 +1,422 @@
+INF.03-01-24.06-SG
+
+Temat bazy danych: wycieczki i zdjecia
+
+Polecenia:
+
+1. Wybierz jedynie nazwy wycieczek, których początek jest w Muszynie lub Wieliczce.
+2. Wybierz pola: nazwa, opis i poczatek z tabeli wycieczki oraz odpowiadające im pole zrodlo z tabeli zdjecia. Należy użyć relacji.
+3. Zlicz liczbę wycieczek wpisanych do tabeli wycieczki.
+4. Zmodyfikuj strukturę tabeli wycieczki, dodając kolumnę ocena typu całkowitego.
+
+Odpowiedzi:
+1.
+SELECT nazwa
+FROM wycieczki
+WHERE poczatek IN ('Muszyna', 'Wieliczka');
+
+2.
+
+SELECT w.nazwa, w.opis, w.poczatek, z.zrodlo
+FROM wycieczki AS w
+JOIN zdjecia AS z ON w.zdjecia_id = z.id;
+
+3.
+
+SELECT COUNT(*) AS liczba_wycieczek
+FROM wycieczki;
+
+4.
+
+ALTER TABLE wycieczki ADD COLUMN ocena INT;
+
+INF.03-02-24.06-SG
+
+Temat bazy danych: uczestnicy i logowanie
+
+Polecenia:
+
+1. Wstaw do tabeli logowanie nick Jeremi i hasło Jer123. Wstawianemu wierszowi nadaj identyfikator odpowiadający wartości klucza obcego dla wiersza z danymi Jeremi Kowalski z tabeli uczestnicy.
+2. Oblicz średni rok urodzenia uczestników. Kolumna ma mieć alias Średni rok urodzenia, a wynik ma być zaokrąglony w dół.
+3. Wybierz imiona, nazwiska uczestników oraz odpowiadające im nick i hasło dla osób, których imię zaczyna się na J. Należy użyć relacji.
+4. Utwórz użytkownika MySQL uczestnik@localhost o haśle Ucz123&.
+5. Nadaj temu użytkownikowi prawa SELECT i UPDATE do tabeli uczestnicy.
+
+Odpowiedzi:
+1.
+INSERT INTO logowanie (id, nick, haslo)
+VALUES (
+(SELECT logowanie_id FROM uczestnicy WHERE imie = 'Jeremi' AND nazwisko = 'Kowalski'),
+'Jeremi',
+'Jer123'
+);
+
+2.
+
+SELECT FLOOR(AVG(rok)) AS 'Średni rok urodzenia'
+FROM uczestnicy;
+
+3.
+
+SELECT u.imie, u.nazwisko, l.nick, l.haslo
+FROM uczestnicy AS u
+JOIN logowanie AS l ON u.logowanie_id = l.id
+WHERE u.imie LIKE 'J%';
+
+4.
+
+CREATE USER 'uczestnik'@'localhost' IDENTIFIED BY 'Ucz123&';
+
+5.
+
+GRANT SELECT, UPDATE ON uczestnicy TO 'uczestnik'@'localhost';
+
+INF.03-03-24.06-SG
+
+Temat bazy danych: wodowskazy i pomiary
+
+Polecenia:
+
+1. Wybierz pola: nazwa, rzeka, stanAlarmowy z tabeli wodowskazy.
+2. Wybierz pola: nazwa, rzeka, stanOstrzegawczy, stanAlarmowy z tabeli wodowskazy oraz odpowiadające im pole stanWody z tabeli pomiary dla daty 2022-05-05. Należy użyć relacji.
+3. Wybierz pola: nazwa, rzeka, stanOstrzegawczy, stanAlarmowy z tabeli wodowskazy oraz odpowiadające im pole stanWody z tabeli pomiary dla daty 2022-05-05, ale tylko wtedy, gdy stanWody jest większy od stanOstrzegawczy. Należy użyć relacji.
+4. Wybierz dataPomiaru i oblicz średni stanWody z tabeli pomiary, grupując według daty.
+
+Odpowiedzi:
+1.
+SELECT nazwa, rzeka, stanAlarmowy
+FROM wodowskazy;
+
+2.
+
+SELECT w.nazwa, w.rzeka, w.stanOstrzegawczy, w.stanAlarmowy, p.stanWody
+FROM wodowskazy AS w
+JOIN pomiary AS p ON w.id = p.wodowskazy_id
+WHERE p.dataPomiaru = '2022-05-05';
+
+3.
+
+SELECT w.nazwa, w.rzeka, w.stanOstrzegawczy, w.stanAlarmowy, p.stanWody
+FROM wodowskazy AS w
+JOIN pomiary AS p ON w.id = p.wodowskazy_id
+WHERE p.dataPomiaru = '2022-05-05'
+AND p.stanWody > w.stanOstrzegawczy;
+
+4.
+
+SELECT dataPomiaru, AVG(stanWody) AS srednia_stanWody
+FROM pomiary
+GROUP BY dataPomiaru;
+
+INF.03-04-24.06-SG
+
+Temat bazy danych: galeria, autorzy i zdjecia
+
+Polecenia:
+
+1. Wybierz pola tytul i plik z tabeli zdjecia dla zdjęć z polubieniami większymi lub równymi 100.
+2. Wybierz pola plik, tytul, polubienia z tabeli zdjecia oraz odpowiadające im pola imie i nazwisko z tabeli autorzy. Posortuj rosnąco według nazwiska.
+3. Wybierz pole imie i oblicz, ile jest zdjęć dla tego imienia. Należy użyć relacji.
+4. Zmodyfikuj strukturę tabeli zdjecia. Dodaj kolumnę rozmiarPliku typu całkowitego.
+
+Odpowiedzi:
+1.
+SELECT tytul, plik
+FROM zdjecia
+WHERE polubienia >= 100;
+
+2.
+
+SELECT z.plik, z.tytul, z.polubienia, a.imie, a.nazwisko
+FROM zdjecia AS z
+JOIN autorzy AS a ON z.autorzy_id = a.id
+ORDER BY a.nazwisko ASC;
+
+3.
+
+SELECT a.imie, COUNT(*) AS liczba_zdjec
+FROM autorzy AS a
+JOIN zdjecia AS z ON a.id = z.autorzy_id
+GROUP BY a.imie;
+
+4.
+
+ALTER TABLE zdjecia ADD COLUMN rozmiarPliku INT;
+
+INF.03-05-24.06-SG
+
+Temat bazy danych: marki i samochody
+
+Polecenia:
+
+1. Wybierz jedynie nazwy marek samochodów.
+2. Wybierz pola: model, rocznik, przebieg, paliwo, cena, zdjecie z tabeli samochody dla rekordu o id = 10.
+3. Wybierz pole nazwa z tabeli marki oraz odpowiadające jej pola: model, rocznik, cena, zdjecie z tabeli samochody jedynie dla samochodów wyróżnionych. Zapytanie ma zwrócić dokładnie 4 wiersze.
+4. Wybierz pola: model, cena, zdjecie z tabeli samochody dla samochodów o nazwie marki Audi.
+
+Odpowiedzi:
+1.
+SELECT nazwa
+FROM marki;
+
+2.
+
+SELECT model, rocznik, przebieg, paliwo, cena, zdjecie
+FROM samochody
+WHERE id = 10;
+
+3.
+
+SELECT m.nazwa, s.model, s.rocznik, s.cena, s.zdjecie
+FROM marki AS m
+JOIN samochody AS s ON m.id = s.marki_id
+WHERE s.wyrozniony = 1;
+
+4.
+
+SELECT s.model, s.cena, s.zdjecie
+FROM samochody AS s
+JOIN marki AS m ON s.marki_id = m.id
+WHERE m.nazwa = 'Audi';
+
+INF.03-06-24.06-SG
+
+Temat bazy danych: konferencja, uczestnicy i wyklady
+
+Polecenia:
+
+1. Wybierz jedynie imię, nazwisko i koszt konferencji dla uczestników, którzy jeszcze nie zapłacili.
+2. Oblicz dla wszystkich uczestników: średni koszt konferencji, sumę kosztów oraz liczbę uczestników. Każda kolumna ma mieć własny alias.
+3. Wybierz jedynie nazwę wykładu i przypisane jej nazwiska oraz adresy email uczestników, którzy zapłacili. Należy użyć relacji.
+4. Usuń kolumnę haslo z tabeli uczestnicy.
+
+Odpowiedzi:
+1.
+SELECT imie, nazwisko, koszty
+FROM uczestnicy
+WHERE zaplacono = 0;
+
+2.
+
+SELECT
+AVG(koszty) AS 'Średni koszt',
+SUM(koszty) AS 'Całkowity koszt',
+COUNT(*) AS 'Liczba uczestników'
+FROM uczestnicy;
+
+3.
+
+SELECT w.nazwa, u.nazwisko, u.email
+FROM wyklady AS w
+JOIN uczestnicy AS u ON w.id = u.wyklady_id
+WHERE u.zaplacono = 1;
+
+4.
+
+ALTER TABLE uczestnicy DROP COLUMN haslo;
+
+INF.03-07-24.06-SG
+
+Temat bazy danych: wazenie i lokalizacje
+
+Polecenia:
+
+1. Aktualizuj tabelę wagi. Rekordy, w których lokalizacje_id jest równe 2, 3, 4 mają mieć ustawione aktualne datę i czas.
+2. Wybierz jedynie ulicę z tabeli lokalizacje.
+3. Wstaw do tabeli wagi rekord z danymi: lokalizacje_id = 5, waga losowa 1 do 10, rejestracja = DW12345, aktualna data i czas.
+4. Wybierz rejestracja, waga, dzien, czas z tabeli wagi oraz odpowiadającą ulicę z tabeli lokalizacje dla rekordów, w których waga jest większa od 5. Należy użyć relacji.
+
+Odpowiedzi:
+1.
+UPDATE wagi
+SET dzien = CURRENT_DATE(), czas = CURRENT_TIME()
+WHERE lokalizacje_id IN (2, 3, 4);
+
+2.
+
+SELECT ulica
+FROM lokalizacje;
+
+3.
+
+INSERT INTO wagi (lokalizacje_id, waga, rejestracja, dzien, czas)
+VALUES (5, FLOOR(1 + RAND() * 10), 'DW12345', CURRENT_DATE(), CURRENT_TIME());
+
+4.
+
+SELECT w.rejestracja, w.waga, w.dzien, w.czas, l.ulica
+FROM wagi AS w
+JOIN lokalizacje AS l ON w.lokalizacje_id = l.id
+WHERE w.waga > 5;
+
+INF.03-08-24.06-SG
+
+Temat bazy danych: osoby, adresy i telefony
+
+Polecenia:
+
+1. Wybierz imię i nazwisko osób urodzonych po 2000 roku.
+2. Wybierz nazwy miast z tabeli adresy, posortowane alfabetycznie rosnąco, bez powtórzeń.
+3. Wybierz imię, nazwisko osób oraz ich numery telefonów. Należy użyć relacji.
+4. Dodaj do tabeli adresy kolumnę numerMieszkania typu całkowitego, po kolumnie numer.
+
+Odpowiedzi:
+1.
+SELECT imie, nazwisko
+FROM osoby
+WHERE YEAR(dataUr) > 2000;
+
+2.
+
+SELECT DISTINCT miasto
+FROM adresy
+ORDER BY miasto;
+
+3.
+
+SELECT o.imie, o.nazwisko, t.numer
+FROM osoby AS o
+JOIN telefony AS t ON o.id = t.osoby_id;
+
+4.
+
+ALTER TABLE adresy ADD COLUMN numerMieszkania INT AFTER numer;
+
+INF.03-09-24.06-SG
+
+Temat bazy danych: wycieczki i zdjecia
+
+Polecenia:
+
+1. Wybierz miejsce i liczbę dni dla wycieczek, których cena jest mniejsza niż 1000 zł.
+2. Oblicz średnią cenę dla wycieczek pogrupowanych według liczby dni. Kwerenda ma zwrócić jedynie liczba dni oraz średnia cena z aliasem sredniaCena.
+3. Wybierz miejsce wycieczki i odpowiadającą mu nazwę zdjęcia dla wycieczek o cenie większej niż 500 zł. Należy użyć relacji.
+4. Utwórz użytkownika Ewa@localhost o haśle Ewa!Ewa dla bazy wycieczki.
+
+Odpowiedzi:
+1.
+SELECT miejsce, liczbaDni
+FROM wycieczki
+WHERE cena < 1000;
+
+2.
+
+SELECT liczbaDni, AVG(cena) AS sredniaCena
+FROM wycieczki
+GROUP BY liczbaDni;
+
+3.
+
+SELECT w.miejsce, z.nazwa
+FROM wycieczki AS w
+JOIN zdjecia AS z ON w.id = z.wycieczki_id
+WHERE w.cena > 500;
+
+4.
+
+CREATE USER 'Ewa'@'localhost' IDENTIFIED BY 'Ewa!Ewa';
+
+INF.03-10-24.06-SG
+
+Temat bazy danych: kadry, pracownicy i stanowiska
+
+Polecenia:
+
+1. Wybierz liczbę wierszy i pensję, grupując pracowników według pensji i sortując dane malejąco według pensji. W wyniku mają być pokazane poszczególne pensje oraz liczba osób, które je pobierają.
+2. Wybierz imiona i nazwiska pracowników oraz odpowiadające im nazwy stanowisk dla pracowników o stażu większym niż 10 lat. Należy użyć relacji.
+3. Wybierz nazwiska i pensję dla pracowników, których staż wynosi od 10 do 20 lat.
+4. Dodaj do tabeli stanowiska kolumnę minPensja typu całkowitego.
+
+Odpowiedzi:
+1.
+SELECT pensja, COUNT(*) AS liczba_pracownikow
+FROM pracownicy
+GROUP BY pensja
+ORDER BY pensja DESC;
+
+2.
+
+SELECT p.imie, p.nazwisko, s.nazwa
+FROM pracownicy AS p
+JOIN stanowiska AS s ON p.stanowiska_id = s.id
+WHERE p.staz > 10;
+
+3.
+
+SELECT nazwisko, pensja
+FROM pracownicy
+WHERE staz BETWEEN 10 AND 20;
+
+4.
+
+ALTER TABLE stanowiska ADD COLUMN minPensja INT;
+
+INF.03-11-24.06-SG
+
+Temat bazy danych: swinki i rasy
+
+Polecenia:
+
+1. Wybierz imię i miot z tabeli swinki dla świnek urodzonych w lipcu.
+2. Wybierz niepowtarzające się wiersze z datą urodzenia i miotem z tabeli swinki oraz odpowiadającą im nazwę rasy z tabeli rasy dla id rasy równego 1. Należy użyć relacji.
+3. Wybierz jedynie imię, cenę i opis świnek, których id rasy jest równe 1.
+4. Wybierz jedynie rasę z tabeli rasy.
+
+Odpowiedzi:
+1.
+SELECT imie, miot
+FROM swinki
+WHERE MONTH(dataUr) = 7;
+
+2.
+
+SELECT DISTINCT s.dataUr, s.miot, r.nazwa
+FROM swinki AS s
+JOIN rasy AS r ON s.rasy_id = r.id
+WHERE r.id = 1;
+
+3.
+
+SELECT imie, cena, opis
+FROM swinki
+WHERE rasy_id = 1;
+
+4.
+
+SELECT nazwa
+FROM rasy;
+
+INF.03-12-24.06-SG
+
+Temat bazy danych: pracownicy i stanowiska
+
+Polecenia:
+
+1. Wybierz liczbę pracowników i pensję, grupując po pensji i sortując malejąco według pensji.
+2. Wybierz imiona i nazwiska pracowników oraz odpowiadające im stanowiska dla pracowników o stażu większym niż 10 lat.
+3. Wybierz nazwiska i pensję dla pracowników ze stażem od 10 do 20 lat.
+4. Dodaj do tabeli stanowiska kolumnę minPensja typu całkowitego.
+
+Odpowiedzi:
+1.
+SELECT pensja, COUNT(*) AS liczba_pracownikow
+FROM pracownicy
+GROUP BY pensja
+ORDER BY pensja DESC;
+
+2.
+
+SELECT p.imie, p.nazwisko, s.nazwa
+FROM pracownicy AS p
+JOIN stanowiska AS s ON p.stanowiska_id = s.id
+WHERE p.staz > 10;
+
+3.
+
+SELECT nazwisko, pensja
+FROM pracownicy
+WHERE staz BETWEEN 10 AND 20;
+
+4.
+
+ALTER TABLE stanowiska ADD COLUMN minPensja INT;
