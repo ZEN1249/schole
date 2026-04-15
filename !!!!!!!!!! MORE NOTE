@@ -1,0 +1,602 @@
+NOTATKA PHP DO INF.03
+	1.	PODSTAWY PHP
+
+PHP zaczyna się od znacznika:
+
+<?php
+...
+?>
+
+
+Najczęściej używane polecenia:
+echo – wypisuje tekst lub HTML
+print – też wypisuje tekst, podobnie jak echo
+; – każda instrukcja musi kończyć się średnikiem
+
+Przykład:
+
+<?php
+echo "Witaj świecie";
+?>
+
+
+Komentarze:
+
+komentarz jednowierszowy
+
+// komentarz jednowierszowy
+/* komentarz wielowierszowy */
+
+Zmienne zapisuje się znakiem $:
+$imie = “Jan”;
+$wiek = 17;
+
+Łączenie tekstu:
+echo “Imię: “ . $imie;
+echo “Wiek: “ . $wiek;
+
+⸻
+
+	2.	WARUNKI IF / ELSE
+
+Przykład:
+
+<?php
+$wiek = 18;
+
+if ($wiek >= 18) {
+    echo "pełnoletni";
+} else {
+    echo "niepełnoletni";
+}
+?>
+
+
+Najważniejsze:
+if – jeśli warunek jest prawdziwy
+else – jeśli warunek jest fałszywy
+elseif – dodatkowy warunek
+
+Przykład z tekstem:
+
+<?php
+$imie = "Anna";
+
+if ($imie == "Anna") {
+    echo "To Anna";
+} else {
+    echo "To nie Anna";
+}
+?>
+
+
+Porównania:
+== równe
+!= różne
+
+większe
+< mniejsze
+= większe lub równe
+<= mniejsze lub równe
+
+⸻
+
+	3.	isset() I empty()
+
+isset() sprawdza, czy zmienna istnieje.
+empty() sprawdza, czy zmienna jest pusta.
+
+Najczęstszy wzór na egzaminie:
+
+<?php
+if (isset($_POST["imie"]) && $_POST["imie"] != "") {
+    echo "Pole imie jest wypełnione";
+} else {
+    echo "Wpisz imie";
+}
+?>
+
+
+isset($_POST[“imie”]) oznacza: czy formularz wysłał pole imie.
+
+⸻
+
+	4.	GET I POST
+
+GET
+Dane są widoczne w adresie strony.
+Stosuje się przy wyszukiwaniu, filtrowaniu, pobieraniu danych.
+
+POST
+Dane nie są widoczne w adresie.
+Stosuje się przy dodawaniu danych, formularzach, logowaniu.
+
+Pobranie danych z GET:
+
+<?php
+$imie = $_GET["imie"];
+echo $imie;
+?>
+
+
+Pobranie danych z POST:
+
+<?php
+$imie = $_POST["imie"];
+echo $imie;
+?>
+
+
+Najczęściej na egzaminie:
+$_POST[“pole”]
+$_GET[“pole”]
+
+⸻
+
+	5.	FORMULARZE HTML
+
+Przykład formularza POST:
+
+<form method="post">
+    <input type="text" name="imie">
+    <input type="submit" value="Wyślij">
+</form>
+
+
+Przykład formularza GET:
+
+<form method="get">
+    <input type="text" name="imie">
+    <input type="submit" value="Szukaj">
+</form>
+
+
+Bardzo ważne:
+name musi mieć taką samą nazwę, jakiej używasz w PHP.
+Jeśli w HTML jest name=“imie”, to w PHP piszesz $_POST[“imie”] albo $_GET[“imie”].
+
+⸻
+
+	6.	ŁĄCZENIE Z BAZĄ DANYCH
+
+Najczęstszy wzór:
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "nazwa_bazy");
+
+if (!$conn) {
+    echo "Nie udało się połączyć z bazą";
+    return;
+}
+?>
+
+
+Parametry:
+“localhost” – serwer lokalny
+“root” – użytkownik
+“” – hasło, jeśli puste
+“nazwa_bazy” – nazwa bazy danych
+
+Jeśli połączenie się nie uda:
+if (!$conn) { … }
+
+⸻
+
+	7.	WYKONANIE ZAPYTANIA SQL
+
+Wzór:
+
+<?php
+$sql = "SELECT * FROM uczniowie";
+$result = mysqli_query($conn, $sql);
+?>
+
+
+mysqli_query() wykonuje zapytanie SQL.
+
+Jeżeli zapytanie się uda, wynik trafia do $result.
+
+⸻
+
+	8.	ODCZYT DANYCH Z BAZY
+
+mysqli_fetch_assoc()
+
+Zwraca tablicę asocjacyjną, czyli po nazwach kolumn.
+
+Przykład:
+
+<?php
+$row = mysqli_fetch_assoc($result);
+echo $row["imie"];
+echo $row["nazwisko"];
+?>
+
+
+mysqli_fetch_row()
+
+Zwraca tablicę indeksowaną.
+
+Przykład:
+
+<?php
+$row = mysqli_fetch_row($result);
+echo $row[0];
+echo $row[1];
+?>
+
+
+mysqli_fetch_array()
+
+Zwraca oba sposoby naraz: indeksy i nazwy.
+
+Przykład:
+
+<?php
+$row = mysqli_fetch_array($result);
+echo $row["imie"];
+echo $row[0];
+?>
+
+
+Na egzaminie najlepiej używać:
+mysqli_fetch_assoc()
+
+⸻
+
+	9.	PĘTLA WHILE PRZY DANYCH Z BAZY
+
+Najczęstszy wzór:
+
+<?php
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row["imie"] . " " . $row["nazwisko"] . "<br>";
+}
+?>
+
+
+To działa tak:
+dopóki są kolejne wiersze, pobieraj je i wypisuj.
+
+⸻
+
+	10.	LICZENIE WIERSZY
+
+mysqli_num_rows()
+
+Przykład:
+
+<?php
+echo mysqli_num_rows($result);
+?>
+
+
+To zwraca liczbę rekordów w wyniku zapytania.
+
+⸻
+
+	11.	ZAMKNIĘCIE POŁĄCZENIA
+
+Po zakończeniu pracy:
+
+<?php
+mysqli_close($conn);
+?>
+
+
+
+⸻
+
+	12.	INSERT INTO
+
+Dodawanie nowego rekordu:
+
+<?php
+$sql = "INSERT INTO uczniowie (imie, nazwisko, wiek)
+VALUES ('Jan', 'Kowalski', 17)";
+mysqli_query($conn, $sql);
+?>
+
+
+Ważne:
+	•	teksty w SQL zapisuje się w apostrofach
+	•	liczby zwykle bez apostrofów
+	•	najlepiej podawać nazwy kolumn
+
+Wzór:
+INSERT INTO tabela (kol1, kol2, kol3)
+VALUES (‘tekst’, ‘tekst’, 123);
+
+Przykład egzaminacyjny:
+
+<?php
+$imie = $_POST["imie"];
+$nazwisko = $_POST["nazwisko"];
+$wiek = $_POST["wiek"];
+
+$sql = "INSERT INTO uczniowie (imie, nazwisko, wiek)
+VALUES ('$imie', '$nazwisko', '$wiek')";
+mysqli_query($conn, $sql);
+?>
+
+
+
+⸻
+
+	13.	SELECT Z WARUNKIEM
+
+Przykład:
+
+<?php
+$sql = "SELECT imie, nazwisko, wiek FROM uczniowie WHERE imie = 'Jan'";
+$result = mysqli_query($conn, $sql);
+?>
+
+
+Jeśli chcesz pobrać dane po imieniu z formularza:
+
+<?php
+$imie = $_GET["imie"];
+$sql = "SELECT imie, nazwisko, wiek FROM uczniowie WHERE imie = '$imie'";
+$result = mysqli_query($conn, $sql);
+?>
+
+
+
+⸻
+
+	14.	UPDATE
+
+Zmiana danych:
+
+<?php
+$sql = "UPDATE uczniowie
+SET wiek = 18
+WHERE id = 1";
+mysqli_query($conn, $sql);
+?>
+
+
+Wzór:
+UPDATE tabela
+SET kolumna = nowa_wartość
+WHERE warunek;
+
+⸻
+
+	15.	DELETE
+
+Usuwanie rekordu:
+
+<?php
+$sql = "DELETE FROM uczniowie WHERE id = 1";
+mysqli_query($conn, $sql);
+?>
+
+
+Wzór:
+DELETE FROM tabela WHERE warunek;
+
+⸻
+
+	16.	ALTER TABLE
+
+Dodanie kolumny:
+ALTER TABLE uczniowie ADD COLUMN email VARCHAR(100);
+
+Dodanie kolumny w konkretnym miejscu:
+ALTER TABLE uczniowie ADD COLUMN email VARCHAR(100) AFTER nazwisko;
+
+Usunięcie kolumny:
+ALTER TABLE uczniowie DROP COLUMN wiek;
+
+Zmiana typu:
+ALTER TABLE uczniowie MODIFY COLUMN wiek INT;
+
+Przykłady:
+
+<?php
+$sql = "ALTER TABLE uczniowie ADD COLUMN email VARCHAR(100)";
+mysqli_query($conn, $sql);
+?>
+
+
+
+⸻
+
+	17.	GRANT I CREATE USER
+
+Tworzenie użytkownika:
+CREATE USER ‘uczen’@‘localhost’ IDENTIFIED BY ‘Haslo123!’;
+
+Nadanie uprawnień:
+GRANT SELECT, UPDATE ON baza.uczniowie TO ‘uczen’@‘localhost’;
+
+Można też:
+GRANT ALL PRIVILEGES ON baza.* TO ‘uczen’@‘localhost’;
+
+Po nadaniu praw czasem:
+FLUSH PRIVILEGES;
+
+⸻
+
+	18.	header(“refresh:10”)
+
+Automatyczne odświeżanie strony co 10 sekund:
+
+<?php
+header("refresh:10");
+?>
+
+
+
+⸻
+
+	19.	FUNKCJE NAJWAŻNIEJSZE NA INF.03
+
+mysqli_connect() – łączenie z bazą
+mysqli_query() – wykonanie zapytania
+mysqli_fetch_assoc() – pobieranie wiersza po nazwach kolumn
+mysqli_fetch_row() – pobieranie wiersza po numerach
+mysqli_num_rows() – liczba wierszy
+mysqli_close() – zamknięcie połączenia
+
+⸻
+
+	20.	KOD Z TWOJEGO ZDJĘCIA, POPRAWIONY
+
+Dodawanie ucznia przez POST:
+
+<?php
+skrypt();
+
+function skrypt() {
+    if (isset($_POST["imie"]) && $_POST["imie"] != "" &&
+        isset($_POST["nazwisko"]) && $_POST["nazwisko"] != "" &&
+        isset($_POST["wiek"]) && $_POST["wiek"] != "") {
+
+        $conn = mysqli_connect("localhost", "root", "", "dziennik");
+        if (!$conn) {
+            echo "nie udalo sie polaczyc z baza";
+            return;
+        }
+
+        $imie = $_POST["imie"];
+        $nazwisko = $_POST["nazwisko"];
+        $wiek = $_POST["wiek"];
+
+        $sql = "INSERT INTO uczniowie (imie, nazwisko, wiek)
+                VALUES ('$imie', '$nazwisko', '$wiek')";
+        $res = mysqli_query($conn, $sql);
+
+        if ($res) {
+            echo "dodano ucznia";
+        } else {
+            echo "nie udalo sie dodac ucznia";
+        }
+
+        mysqli_close($conn);
+    } else {
+        echo "wpisz imie ucznia";
+    }
+}
+?>
+
+
+Wyszukiwanie ucznia przez GET:
+
+<?php
+function skrypt() {
+    if (isset($_GET["imie"]) && $_GET["imie"] != "") {
+        $conn = mysqli_connect("localhost", "root", "", "dziennik");
+        if (!$conn) {
+            echo "nie udalo sie polaczyc z baza";
+            return;
+        }
+
+        $imie = $_GET["imie"];
+        $sql = "SELECT imie, nazwisko, wiek FROM uczniowie WHERE imie = '$imie'";
+        $res = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_row($res)) {
+            echo $row[0] . " " . $row[1] . " " . $row[2] . "<br>";
+        }
+
+        mysqli_close($conn);
+    } else {
+        echo "wpisz imie ucznia";
+    }
+}
+?>
+
+
+
+⸻
+
+	21.	NAJCZĘSTSZY SZABLON NA EGZAMIN
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "baza");
+
+if (!$conn) {
+    echo "Błąd połączenia";
+    return;
+}
+
+$sql = "SELECT * FROM tabela";
+$result = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row["kolumna"];
+}
+
+mysqli_close($conn);
+?>
+
+
+
+⸻
+
+	22.	NA CO UWAŻAĆ
+
+Nie myl:
+$_POST z $_GET
+mysqli_fetch_assoc z mysqli_fetch_row
+tekstów bez apostrofów w SQL
+przecinka między kolumnami w INSERT
+nazw kolumn z nazwami tabel
+loginu root i nazwy bazy
+
+Bardzo ważne:
+Jeśli wynik ma być czytelny, najczęściej używaj:
+while ($row = mysqli_fetch_assoc($result))
+
+Jeśli chcesz wypisać jeden rekord:
+$row = mysqli_fetch_assoc($result);
+
+Jeśli chcesz wypisać wiele:
+while (…)
+
+⸻
+
+	23.	GOTOWIEC DO ZAPAMIĘTANIA
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "baza");
+
+$sql = "SELECT kol1, kol2 FROM tabela";
+$result = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row["kol1"] . " " . $row["kol2"] . "<br>";
+}
+
+mysqli_close($conn);
+?>
+
+
+To jest najważniejszy schemat do nauki na INF.03.
+
+<?php
+if (isset($_POST["pole"]) && $_POST["pole"] != "") {
+
+    $conn = mysqli_connect("localhost", "root", "", "baza");
+
+    if (!$conn) {
+        echo "blad";
+        return;
+    }
+
+    $wartosc = $_POST["pole"];
+
+    $sql = "SELECT * FROM tabela WHERE kolumna = '$wartosc'";
+    $res = mysqli_query($conn, $sql);
+
+    while ($row = mysqli_fetch_assoc($res)) {
+        echo $row["kolumna"];
+    }
+
+    mysqli_close($conn);
+}
+?>
+
