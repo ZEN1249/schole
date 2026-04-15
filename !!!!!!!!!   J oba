@@ -193,3 +193,169 @@ Na egzaminie prawie zawsze użyjesz:
 
 ⸻
 
+
+⸻
+
+📌 1. Połączenie z bazą danych (MUSISZ UMIEĆ)
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "nazwa_bazy");
+
+if (!$conn) {
+    die("Błąd połączenia");
+}
+?>
+
+
+⸻
+
+📌 2. Zapytanie SELECT (wyświetlanie danych)
+
+<?php
+$sql = "SELECT * FROM tabela";
+$result = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row['kolumna'] . "<br>";
+}
+?>
+
+
+⸻
+
+📌 3. INSERT (dodawanie danych)
+
+<?php
+$imie = $_POST['imie'];
+
+$sql = "INSERT INTO tabela (imie) VALUES ('$imie')";
+mysqli_query($conn, $sql);
+
+echo "Dodano!";
+?>
+
+
+⸻
+
+📌 4. Formularz HTML + PHP (KLASYK NA EGZAMINIE)
+
+<form method="post">
+  <input type="text" name="imie">
+  <button type="submit">Wyślij</button>
+</form>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $imie = $_POST['imie'];
+    echo "Wpisano: " . $imie;
+}
+?>
+
+
+⸻
+
+📌 5. SELECT z warunkiem
+
+<?php
+$sql = "SELECT * FROM produkty WHERE cena > 100";
+$result = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row['nazwa'];
+}
+?>
+
+
+⸻
+
+📌 6. DELETE (usuwanie)
+
+<?php
+$sql = "DELETE FROM tabela WHERE id=1";
+mysqli_query($conn, $sql);
+?>
+
+
+⸻
+
+📌 7. UPDATE (rzadziej, ale może być)
+
+<?php
+$sql = "UPDATE tabela SET imie='Jan' WHERE id=1";
+mysqli_query($conn, $sql);
+?>
+
+
+⸻
+
+📌 8. Zamknięcie połączenia
+
+<?php
+mysqli_close($conn);
+?>
+
+
+⸻
+
+🔥 GOTOWIEC EGZAMINACYJNY (NAJWAŻNIEJSZY)
+
+To jest coś, co możesz praktycznie wkleić na egzamin:
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "baza");
+
+if (!$conn) {
+    die("Błąd");
+}
+
+$sql = "SELECT * FROM tabela";
+$result = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo $row['nazwa'] . "<br>";
+}
+
+mysqli_close($conn);
+?>
+
+
+⸻
+
+⚡ FORMULARZ + BAZA (częsty motyw INF.03)
+
+<form method="post">
+  <input type="text" name="imie">
+  <button type="submit">Dodaj</button>
+</form>
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "baza");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $imie = $_POST['imie'];
+
+    $sql = "INSERT INTO tabela (imie) VALUES ('$imie')";
+    mysqli_query($conn, $sql);
+
+    echo "Dodano";
+}
+?>
+
+
+⸻
+
+⚠️ NA CO UWAŻAĆ NA EGZAMINIE
+	•	nazwy bazy MUSZĄ się zgadzać (np. wedkarstwo, rzeki, itd.)
+	•	nazwy kolumn dokładnie jak w poleceniu
+	•	często każą zrobić kilka zapytań (np. 3 SELECT-y)
+	•	pamiętaj o mysqli_fetch_assoc()
+	•	jak coś nie działa → sprawdź literówki
+
+⸻
+
+💡 PRO TIP (ZA PUNKTY)
+
+Egzaminator patrzy czy:
+✔ jest połączenie
+✔ jest zapytanie SQL
+✔ są wyniki 
