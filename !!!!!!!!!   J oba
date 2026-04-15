@@ -1,0 +1,195 @@
+
+📌 1. Reakcja na kliknięcie (podstawa wszystkiego)
+
+<button id="btn">Kliknij</button>
+
+<script>
+document.getElementById("btn").addEventListener("click", function() {
+  alert("Działa!");
+});
+</script>
+
+
+⸻
+
+📌 2. Pobieranie wartości z inputa
+
+<input type="text" id="imie">
+<button onclick="pokaz()">OK</button>
+
+<script>
+function pokaz() {
+  let wartosc = document.getElementById("imie").value;
+  alert(wartosc);
+}
+</script>
+
+
+⸻
+
+📌 3. Zmiana tekstu na stronie
+
+<p id="tekst">Stary tekst</p>
+<button onclick="zmien()">Zmień</button>
+
+<script>
+function zmien() {
+  document.getElementById("tekst").innerHTML = "Nowy tekst";
+}
+</script>
+
+
+⸻
+
+📌 4. Pokaz / ukryj element (NAJWAŻNIEJSZE)
+
+<div id="box">Treść</div>
+<button onclick="toggle()">Pokaż/ukryj</button>
+
+<script>
+function toggle() {
+  let el = document.getElementById("box");
+
+  if (el.style.display === "none") {
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+}
+</script>
+
+👉 krótsza wersja (lepsza):
+
+el.classList.toggle("ukryty");
+
+
+⸻
+
+📌 5. CSS do ukrywania
+
+<style>
+.ukryty {
+  display: none;
+}
+</style>
+
+
+⸻
+
+📌 6. Popup (egzamin lubi 😎)
+
+✔ najprostszy
+
+<button onclick="alert('Hej!')">Kliknij</button>
+
+✔ potwierdzenie
+
+<button onclick="confirm('Na pewno?')">Usuń</button>
+
+
+⸻
+
+📌 7. Popup własny (lepszy na punkty)
+
+<button onclick="pokaz()">Pokaż popup</button>
+
+<div id="popup" style="display:none; border:1px solid black;">
+  To jest popup
+  <button onclick="zamknij()">X</button>
+</div>
+
+<script>
+function pokaz() {
+  document.getElementById("popup").style.display = "block";
+}
+
+function zamknij() {
+  document.getElementById("popup").style.display = "none";
+}
+</script>
+
+
+⸻
+
+📌 8. Liczenie (np. checkboxy – bardzo częste)
+
+<input type="checkbox" id="a" value="10"> A<br>
+<input type="checkbox" id="b" value="20"> B<br>
+
+<button onclick="licz()">Oblicz</button>
+
+<p id="wynik"></p>
+
+<script>
+function licz() {
+  let suma = 0;
+
+  if (document.getElementById("a").checked) {
+    suma += 10;
+  }
+
+  if (document.getElementById("b").checked) {
+    suma += 20;
+  }
+
+  document.getElementById("wynik").innerHTML = suma;
+}
+</script>
+
+
+⸻
+
+📌 9. Sprawdzanie hasła (częsty motyw)
+
+<input type="password" id="p1">
+<input type="password" id="p2">
+<button onclick="sprawdz()">Sprawdź</button>
+
+<script>
+function sprawdz() {
+  let p1 = document.getElementById("p1").value;
+  let p2 = document.getElementById("p2").value;
+
+  if (p1 === p2) {
+    alert("Hasła są takie same");
+  } else {
+    alert("Hasła różne");
+  }
+}
+</script>
+
+
+⸻
+
+📌 10. Galeria (next / prev)
+
+<img id="img" src="1.jpg" width="200">
+<button onclick="next()">></button>
+
+<script>
+let nr = 1;
+
+function next() {
+  nr++;
+  if (nr > 3) nr = 1;
+
+  document.getElementById("img").src = nr + ".jpg";
+}
+</script>
+
+
+⸻
+
+⚡ NAJWAŻNIEJSZE DO ZAPAMIĘTANIA
+
+Na egzaminie prawie zawsze użyjesz:
+	•	getElementById
+	•	.value
+	•	.innerHTML
+	•	.style.display
+	•	.classList.toggle()
+	•	.checked
+	•	addEventListener albo onclick
+
+⸻
+
