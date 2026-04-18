@@ -1,0 +1,5 @@
+f-Fields-pola(zmienne klasy)
+m*(z gwiazdka)-Constructors- konstruktory(metody tworzące obiekt)
+m-Methods - metody (funkcje klasy)
+p-properties - właściwości (gettery/settery lub dostęp do pól)
+I-inner Classes - klasy wewnętrzne
