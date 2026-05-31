@@ -1,0 +1,37 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Tekst zaszyfrowany: ");
+        string tekst = Console.ReadLine().ToUpper();
+
+        Console.Write("Klucz: ");
+        string klucz = Console.ReadLine().ToUpper();
+
+        string wynik = "";
+        int j = 0;
+
+        for (int i = 0; i < tekst.Length; i++)
+        {
+            char c = tekst[i];
+
+            if (c >= 'A' && c <= 'Z')
+            {
+                int t = c - 'A';
+                int k = klucz[j % klucz.Length] - 'A';
+
+                wynik += (char)((t - k + 26) % 26 + 'A');
+
+                j++;
+            }
+            else
+            {
+                wynik += c;
+            }
+        }
+
+        Console.WriteLine("Odszyfrowane: " + wynik);
+    }
+}
