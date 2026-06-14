@@ -1,0 +1,126 @@
+//DODAWNIE 
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("PODAJ WYMIARY MACIERZY");
+
+        Console.Write("Liczba wierszy: ");
+        int W = Convert.ToInt32(Console.ReadLine());
+
+        Console.Write("Liczba kolumn: ");
+        int K = Convert.ToInt32(Console.ReadLine());
+
+        int[,] A = new int[W, K];
+        int[,] B = new int[W, K];
+        int[,] C = new int[W, K];
+
+        Console.WriteLine("\n=== WARTOSCI DLA MACIERZY A ===");
+
+        for (int i = 0; i < A.GetLength(0); i++)
+        {
+            for (int j = 0; j < A.GetLength(1); j++)
+            {
+                Console.Write($"A[{i},{j}] = ");
+                A[i, j] = Convert.ToInt32(Console.ReadLine());
+            }
+        }
+
+        Console.WriteLine("\n=== WARTOSCI DLA MACIERZY B ===");
+
+        for (int i = 0; i < B.GetLength(0); i++)
+        {
+            for (int j = 0; j < B.GetLength(1); j++)
+            {
+                Console.Write($"B[{i},{j}] = ");
+                B[i, j] = Convert.ToInt32(Console.ReadLine());
+            }
+        }
+
+        // dodawanie
+
+        for (int i = 0; i < W; i++)
+        {
+            for (int j = 0; j < K; j++)
+            {
+                C[i, j] = A[i, j] + B[i, j];
+            }
+        }
+
+        Console.WriteLine("\n=== WYNIK DODAWANIA ===");
+
+        for (int i = 0; i < C.GetLength(0); i++)
+        {
+            Console.Write("|");
+
+            for (int j = 0; j < C.GetLength(1); j++)
+            {
+                Console.Write(C[i, j] + "|");
+            }
+
+            Console.WriteLine();
+        }
+    }
+}
+// mnozenie
+
+
+
+
+            Console.WriteLine("Podaj wiersze dla pierwszej macierzy");
+            int WA = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Podaj kolumny dla pierwszej macierzy");
+            int KA = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Podaj wiersze dla drugiej macierzy");
+            int WB = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Podaj kolumny dla drugiej macierzy");
+            int KB = Convert.ToInt32(Console.ReadLine());
+            if (KA == WB)
+            {
+                int[,] A = new int[WA, KA];
+                int[,] B = new int[WB, KB];
+                int[,] C = new int[WA, KB];
+                Console.WriteLine("WARTOSCI DLA TABELI A\n");
+                for (int i=0;i<A.GetLength(0);i++) {
+                    for (int j=0;j<A.GetLength(1);j++) {
+                        Console.WriteLine($"Podaj wartosc dla elementu o inexach {i},{j}");
+                        A[i, j]= Convert.ToInt32(Console.ReadLine());
+                    }
+                }
+                Console.WriteLine("WARTOSCI DLA TABELI B\n");
+                for (int i = 0; i < B.GetLength(0); i++)
+                {
+                    for (int j = 0; j < B.GetLength(1); j++)
+                    {
+                        Console.WriteLine($"Podaj wartosc dla elementu o inexach {i},{j}");
+                        B[i, j] = Convert.ToInt32(Console.ReadLine());
+                    }
+                    
+                }
+
+                for (int i = 0; i < WA; i++)
+                {
+                    for (int j = 0; j < KB; j++)
+                    {
+
+                        for (int k = 0; k < KA; k++)
+                        {
+                            C[i, j] += A[i, k] * B[k, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < C.GetLength(0); i++)
+                {
+                    Console.Write("|");
+                    for (int j = 0; j < C.GetLength(1); j++)
+                    {
+                        Console.Write(C[i, j] + "|");
+                    }
+                    Console.WriteLine();
+                }
+            }
+            else {
+                Console.WriteLine("BRAK MOZLIWOSCI MNOZENIA MACIERZY");
+            }
